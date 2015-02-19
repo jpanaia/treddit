@@ -4,22 +4,31 @@
     <div class="col-md-12">
       <div class="row">
         <div class="col-xs-1">
-          <h1>#</h1>
+          <h1>
+            <% if post.score == nil %>
+              0
+            <% else %>
+              <%= post.score %>
+            <% end %>
+          </h1>
+          <% if user_signed_in? %>
+          <%= link_to upvote_path(id: post.id) do %>
+            <p class="glyphicon glyphicon-thumbs-up"></p>
+          <% end %>
+          <%= link_to downvote_path(id: post.id) do %>
+          <p class="glyphicon glyphicon-thumbs-down"></p>
+          <% end %>
+          <% end %>
         </div>
         <div class="col-xs-11">
           <h2><%= link_to post.title, post.url, target: "blank" %></h2>
           <p>submitted <%= time_ago_in_words(post.created_at) %> ago by <strong><%= post.user.email %></strong></p>
           
-          <%= post.score %>
           <% if user_signed_in? %>
-          <%= link_to "upvote", upvote_path(id: post.id) %>
-          <%= link_to "downvote", downvote_path(id: post.id) %>
-          
           <% if post.user_id == current_user.id %>
-            <%#= render "votes/downvote" %>
-            <p><%#= link_to 'Show', post %>
+            <p>
             <%= link_to 'Edit', edit_post_path(post) %> |
-            <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></p>
+            <%= link_to 'Delete', post, method: :delete, data: { confirm: 'Are you sure?' } %></p>
           <% end %>
           <% end %>
          </div>
