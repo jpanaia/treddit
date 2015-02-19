@@ -7,14 +7,6 @@ class VotesController < ApplicationController
     @votes = Vote.all
   end
 
-  def upscore 
-    @vote.score += 1 
-  end
-
-  def downscore
-    @vote.score -= 1
-  end
-
   # GET /votes/1
   # GET /votes/1.json
   def show

@@ -8,6 +8,34 @@ class PostsController < ApplicationController
     @posts = Post.all
   end
 
+  def upvote
+    @post = Post.find(params[:id])
+    if @post.score == nil
+      @post.score = 1
+    else
+     @post.score += 1
+    end
+    @post.save
+    respond_to do |format|
+      format.html { redirect_to posts_path, notice: 'Score counted.' }
+    end
+  end
+
+  def downvote
+    @post = Post.find(params[:id])
+    if @post.score == nil
+      @post.score = 0
+    elsif @post.score == 0
+      @post.score == 0
+    else
+      @post.score -= 1
+    end
+    @post.save
+    respond_to do |format|
+      format.html { redirect_to posts_path, notice: 'Score counted.' }
+    end
+  end
+
   # GET /posts/1
   # GET /posts/1.json
   def show
