@@ -45,7 +45,7 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @post = Post.new 
-    @post.user = current_user
+    
   end
 
   # GET /posts/1/edit
@@ -55,15 +55,17 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(post_params)
 
+    @post = Post.new(post_params)
+    @post.user_id = current_user.id
+    
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
+        format.html { redirect_to posts_path, notice: 'Post was successfully created.' }
         format.json { render :show, status: :created, location: @post }
       else
         format.html { render :new }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.json { render json: posts_path.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -74,14 +76,14 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     respond_to do |format|
       if @post.user != current_user 
-        format.html { redirect_to @post, notice: 'That post is not yours to edit' } 
+        format.html { redirect_to posts_path, notice: 'That post is not yours to edit' } 
         format.json { render json: @post.errors, status: :unprocessable_entity } 
       elsif @post.update(post_params) 
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' } 
+        format.html { redirect_to posts_path, notice: 'Post was successfully updated.' } 
         format.json { head :no_content } 
       else 
         format.html { render :edit } 
-        format.json { render json: @post.errors, status: :unprocessable_entity } 
+        format.json { render json: posts_path.errors, status: :unprocessable_entity } 
       end 
     end
   end
